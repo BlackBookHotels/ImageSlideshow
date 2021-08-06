@@ -21,7 +21,7 @@ public protocol ActivityIndicatorView {
 
 /// Factory protocol to create new ActivityIndicatorViews. Meant to be implemented when creating custom activity indicator.
 public protocol ActivityIndicatorFactory {
-    func create() -> ActivityIndicatorView
+    func create(index: Int) -> ActivityIndicatorView
 }
 
 /// Default ActivityIndicatorView implementation for UIActivityIndicatorView
@@ -58,7 +58,7 @@ open class DefaultActivityIndicator: ActivityIndicatorFactory {
     }
 
     /// create ActivityIndicatorView instance
-    open func create() -> ActivityIndicatorView {
+    open func create(index: Int) -> ActivityIndicatorView {
         #if swift(>=4.2)
         let activityIndicator = UIActivityIndicatorView(style: style)
         #else
