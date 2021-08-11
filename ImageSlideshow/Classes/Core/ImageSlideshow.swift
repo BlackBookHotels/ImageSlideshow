@@ -312,6 +312,10 @@ open class ImageSlideshow: UIView {
 
         setScrollViewPage(scrollViewPage, animated: false)
     }
+    
+    open func imageNotAvailableView() -> UIView? {
+        return nil
+    }
 
     /// reloads scroll view with latest slideshow items
     func reloadScrollView() {
@@ -324,6 +328,7 @@ open class ImageSlideshow: UIView {
         var i = 0
         for image in scrollViewImages {
             let item = ImageSlideshowItem(image: image, zoomEnabled: zoomEnabled, activityIndicator: activityIndicator?.create(index: max(i - 1, 0)), maximumScale: maximumScale)
+            item.imageNotAvailableView = imageNotAvailableView()
             item.imageView.contentMode = contentScaleMode
             slideshowItems.append(item)
             scrollView.addSubview(item)

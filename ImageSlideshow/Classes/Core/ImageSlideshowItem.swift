@@ -17,6 +17,16 @@ open class ImageSlideshowItem: UIScrollView, UIScrollViewDelegate {
     /// Activity indicator shown during image loading, when nil there won't be shown any
     public let activityIndicator: ActivityIndicatorView?
 
+    /// Image not available view
+    public var imageNotAvailableView: UIView? {
+        didSet {
+            if let view = imageNotAvailableView {
+                view.isHidden = true
+                self.imageViewWrapper.addSubview(view)
+            }
+        }
+    }
+    
     /// Input Source for the item
     public let image: InputSource
 
@@ -40,6 +50,8 @@ open class ImageSlideshowItem: UIScrollView, UIScrollViewDelegate {
         didSet {
             singleTapGestureRecognizer?.isEnabled = loadFailed
             gestureRecognizer?.isEnabled = !loadFailed
+            
+            imageNotAvailableView?.isHidden = !loadFailed
         }
     }
 
@@ -122,6 +134,11 @@ open class ImageSlideshowItem: UIScrollView, UIScrollViewDelegate {
 
         self.activityIndicator?.view.center = imageViewWrapper.center
 
+        if let naView = self.imageNotAvailableView {
+            naView.center = imageViewWrapper.center
+            self.bringSubviewToFront(naView)
+        }
+        
         // if self.frame was changed and zoomInInitially enabled, zoom in
         if lastFrame != frame && zoomInInitially {
             setZoomScale(maximumZoomScale, animated: false)
@@ -139,6 +156,7 @@ open class ImageSlideshowItem: UIScrollView, UIScrollViewDelegate {
             isLoading = true
             imageReleased = false
             activityIndicator?.show()
+            imageNotAvailableView?.isHidden = true
             image.load(to: self.imageView) {[weak self] image in
                 // set image to nil if there was a release request during the image load
                 if let imageRelease = self?.imageReleased, imageRelease {
