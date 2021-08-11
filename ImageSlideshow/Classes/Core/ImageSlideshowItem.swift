@@ -73,6 +73,7 @@ open class ImageSlideshowItem: UIScrollView, UIScrollViewDelegate {
 
         super.init(frame: CGRect.null)
 
+        imageViewWrapper.backgroundColor = .lightGray
         imageViewWrapper.addSubview(imageView)
         imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         imageView.isAccessibilityElement = true
