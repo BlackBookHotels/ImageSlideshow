@@ -313,7 +313,7 @@ open class ImageSlideshow: UIView {
         setScrollViewPage(scrollViewPage, animated: false)
     }
     
-    open func imageNotAvailableView() -> UIView? {
+    open func imageNotAvailableView(index: Int) -> UIView? {
         return nil
     }
 
@@ -328,7 +328,7 @@ open class ImageSlideshow: UIView {
         var i = 0
         for image in scrollViewImages {
             let item = ImageSlideshowItem(image: image, zoomEnabled: zoomEnabled, activityIndicator: activityIndicator?.create(index: max(i - 1, 0)), maximumScale: maximumScale)
-            item.imageNotAvailableView = imageNotAvailableView()
+            item.imageNotAvailableView = imageNotAvailableView(index: max(i - 1, 0))
             item.imageView.contentMode = contentScaleMode
             slideshowItems.append(item)
             scrollView.addSubview(item)
@@ -404,13 +404,13 @@ open class ImageSlideshow: UIView {
      - parameter newPage: new page
      - parameter animated: true if animate the change
      */
-    open func setCurrentPage(_ newPage: Int, animated: Bool) {
+    open func setCurrentPage(_ newPage: Int, animated: Bool, forceLoad: Bool = false) {
         var pageOffset = newPage
         if circular && (scrollViewImages.count > 1) {
             pageOffset += 1
         }
 
-        setScrollViewPage(pageOffset, animated: animated)
+        setScrollViewPage(pageOffset, animated: animated, forceLoad: forceLoad)
     }
 
     /**
@@ -418,10 +418,10 @@ open class ImageSlideshow: UIView {
      - parameter newScrollViewPage: new scroll view page
      - parameter animated: true if animate the change
      */
-    open func setScrollViewPage(_ newScrollViewPage: Int, animated: Bool) {
+    open func setScrollViewPage(_ newScrollViewPage: Int, animated: Bool, forceLoad: Bool = false) {
         if scrollViewPage < scrollViewImages.count {
             scrollView.scrollRectToVisible(CGRect(x: scrollView.frame.size.width * CGFloat(newScrollViewPage), y: 0, width: scrollView.frame.size.width, height: scrollView.frame.size.height), animated: animated)
-            setCurrentPageForScrollViewPage(newScrollViewPage)
+            setCurrentPageForScrollViewPage(newScrollViewPage, forceLoad: forceLoad)
             if animated {
                 isAnimating = true
             }
@@ -445,7 +445,7 @@ open class ImageSlideshow: UIView {
         setScrollViewPage(nextPage, animated: true)
     }
 
-    fileprivate func setCurrentPageForScrollViewPage(_ page: Int) {
+    fileprivate func setCurrentPageForScrollViewPage(_ page: Int, forceLoad: Bool = false) {
         if scrollViewPage != page {
             // current page has changed, zoom out this image
             if slideshowItems.count > scrollViewPage {
@@ -453,7 +453,7 @@ open class ImageSlideshow: UIView {
             }
         }
 
-        if page != scrollViewPage {
+        if forceLoad || (page != scrollViewPage) {
             loadImages(for: page)
         }
         scrollViewPage = page

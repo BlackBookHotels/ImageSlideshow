@@ -22,7 +22,7 @@ open class ImageSlideshowItem: UIScrollView, UIScrollViewDelegate {
         didSet {
             if let view = imageNotAvailableView {
                 view.isHidden = true
-                self.imageViewWrapper.addSubview(view)
+                self.addSubview(view)
             }
         }
     }
@@ -50,7 +50,6 @@ open class ImageSlideshowItem: UIScrollView, UIScrollViewDelegate {
         didSet {
             singleTapGestureRecognizer?.isEnabled = loadFailed
             gestureRecognizer?.isEnabled = !loadFailed
-            
             imageNotAvailableView?.isHidden = !loadFailed
         }
     }
@@ -72,7 +71,6 @@ open class ImageSlideshowItem: UIScrollView, UIScrollViewDelegate {
         self.maximumScale = maximumScale
 
         super.init(frame: CGRect.null)
-
         imageViewWrapper.backgroundColor = .lightGray
         imageViewWrapper.addSubview(imageView)
         imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
