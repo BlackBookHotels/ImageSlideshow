@@ -71,7 +71,7 @@ open class ImageSlideshowItem: UIScrollView, UIScrollViewDelegate {
         self.maximumScale = maximumScale
 
         super.init(frame: CGRect.null)
-        imageViewWrapper.backgroundColor = .lightGray
+        imageViewWrapper.backgroundColor = .clear
         imageViewWrapper.addSubview(imageView)
         imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         imageView.isAccessibilityElement = true
